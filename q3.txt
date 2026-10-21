@@ -1,0 +1,6 @@
+1. mTransform should be the best to move into a seperate component since many other types of 
+game objects can have position and scale, not just sprites. So an ECS can store this transform
+component seperately and reuse it for other entities
+
+2. We need to render sorites in a consistent order (can be from the back to the front) so each
+sprite can blend correctly with the sprites behind it

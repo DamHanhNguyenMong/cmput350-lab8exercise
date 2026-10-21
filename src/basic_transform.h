@@ -9,13 +9,25 @@
 struct BasicTransform {
     // TODO: Determine if possible in general, else provide counterexample:
     // compose(f, g) is equivalent to first applying g, then applying f.
+
+    // BasicTransforms are closed under composition because the result can always be represented by another BasicTransform
     static BasicTransform compose(const BasicTransform& f, const BasicTransform& g) {
-        return {};
+        return {
+            {f.scale.x*g.scale.x, f.scale.y*g.scale.y}, // scale = f.scale*g.scale
+            {f.scale.x*g.translation.x+f.translation.x, f.scale.y*g.translation.y+f.translation.y}
+            // translation = f.scale*g.translation+f.translation
+        };
     };
 
     // TODO: Determine if possible in general, else provide counterexample:
+    // BasicTransforms with nonzero scale components are closed under inversion. The inverse also has nonzero scale 
+    // components, since the reciprocal of a nonzero number is nonzero
     static BasicTransform inverse(const BasicTransform& f) {
-        return {};
+        assert(f.scale.x != 0.f && f.scale.y != 0.f);
+        return {
+            {1.f / f.scale.x, 1.f / f.scale.y}, // scale = 1/f.scale
+            {-f.translation.x / f.scale.x, -f.translation.y / f.scale.y} // translation = -f.translation/f.scale
+        };
     };
 
     constexpr BasicTransform(const sf::Vector2f& scale = {1.f, 1.f},
